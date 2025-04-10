@@ -1,0 +1,4 @@
+/.direnv
+/.vscode/launch.json
+/result
+/secrets-generator

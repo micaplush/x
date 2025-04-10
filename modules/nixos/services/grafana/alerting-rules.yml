@@ -1,0 +1,304 @@
+apiVersion: 1
+groups:
+  - orgId: 1
+    name: Disk
+    folder: Alerts
+    interval: 30m
+    rules:
+      - uid: fde90e7e-c65d-4a24-ac6e-9b8cb4300ef6
+        title: Disk space low
+        condition: C
+        data:
+          - refId: avail
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: PBFA97CFB590B2093
+            model:
+              editorMode: builder
+              expr: node_filesystem_avail_bytes{fstype!~"vfat|ramfs|tmpfs"}
+              hide: false
+              intervalMs: 1000
+              legendFormat: __auto
+              maxDataPoints: 43200
+              range: true
+              refId: avail
+          - refId: min_size
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: PBFA97CFB590B2093
+            model:
+              datasource:
+                type: prometheus
+                uid: PBFA97CFB590B2093
+              editorMode: builder
+              expr: clamp_min(node_filesystem_size_bytes{fstype!~"vfat|ramfs|tmpfs"} * 0.1, 4000000000)
+              hide: false
+              intervalMs: 1000
+              legendFormat: __auto
+              maxDataPoints: 43200
+              range: true
+              refId: min_size
+          - refId: last_avail
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params: []
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - B
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: avail
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: last
+              refId: last_avail
+              type: reduce
+          - refId: C
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: []
+                  reducer:
+                    params: []
+                    type: avg
+                  type: query
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: __expr__
+              expression: $last_avail < $last_min_size
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: math
+          - refId: last_min_size
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: []
+                  reducer:
+                    params: []
+                    type: avg
+                  type: query
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: __expr__
+              expression: min_size
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: last
+              refId: last_min_size
+              type: reduce
+        noDataState: NoData
+        execErrState: Error
+        for: 30m
+        isPaused: false
+  - orgId: 1
+    name: Ping
+    folder: Alerts
+    interval: 2m
+    rules:
+      - uid: ea0d284f-6e24-4223-be99-9aa7a94525dd
+        title: Host down
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: PBFA97CFB590B2093
+            model:
+              editorMode: builder
+              expr: up{job!="toaster.node"}
+              hide: false
+              intervalMs: 1000
+              legendFormat: __auto
+              maxDataPoints: 43200
+              range: true
+              refId: A
+          - refId: B
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params: []
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - B
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: last
+              refId: B
+              type: reduce
+          - refId: C
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 1
+                    type: lt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: NoData
+        execErrState: Error
+        for: 4m
+        isPaused: false
+  - orgId: 1
+    name: systemd
+    folder: Alerts
+    interval: 2m
+    rules:
+      - uid: d81d3de8-44b1-4cfb-bbac-144e08d5137e
+        title: Units failing
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: PBFA97CFB590B2093
+            model:
+              editorMode: builder
+              expr: sum by(job) (node_systemd_units{state="failed"})
+              hide: false
+              intervalMs: 1000
+              legendFormat: __auto
+              maxDataPoints: 43200
+              range: true
+              refId: A
+          - refId: B
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params: []
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - B
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: last
+              refId: B
+              type: reduce
+          - refId: C
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        noDataState: NoData
+        execErrState: Error
+        for: 4m
+        isPaused: false
