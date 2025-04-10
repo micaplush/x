@@ -6,6 +6,11 @@ document at least the most interesting stuff. You can find the introductory post
 here:
 [My Nix-based homelab monorepo](https://mica.lgbt/posts/2025/infrastructure-review/).
 
+You're free to use this however you like but I don't think you'll be able to
+just clone the repo and get anything running in here. This repo is probably best
+used as inspiration or for spinning individual components out into their own
+projects. If you do anything with it, I'd love to hear about it. 😊
+
 ## Naming
 
 Cool people and total lunatics name their stuff "x" so ofc I had to follow suit.
