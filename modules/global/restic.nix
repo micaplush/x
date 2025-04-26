@@ -37,7 +37,7 @@
                   };
                 };
 
-                config = lib.optionalAttrs localEval {
+                config = {
                   secrets = {
                     password = "restic/repo-password/${username}/${name}";
                     url = "restic/repo-url/${username}/${name}";
@@ -47,7 +47,7 @@
             };
         };
 
-        config = lib.optionalAttrs localEval {
+        config = {
           inherit name;
           passwordSecret = "restic/server-password/${name}";
         };
