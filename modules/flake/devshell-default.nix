@@ -120,13 +120,12 @@
       };
 
       generate-secrets = {
+        args = lib.singleton { name = "nix_system"; default = system; };
+
         doc = "Generate all secrets that are out of date";
+
         runtimeInputs = [ pkgs.nix self'.packages.secrets-generator ];
-        script = ''
-          AGENIX_KEY=''${AGENIX_KEY:-$XDG_RUNTIME_DIR/agenix-key-nixnet}
-          nix build .#secretsGenerationConfig.${system}
-          secrets-generator -config ./result -identity "$AGENIX_KEY"
-        '';
+        script = ../../recipes/generate-secrets.sh;
       };
 
       provision-hetzner-vm = {
