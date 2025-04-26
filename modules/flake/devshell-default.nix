@@ -5,6 +5,7 @@
         age
         hcloud
         just
+        nano
         nix
         nix-tree
         shellcheck
