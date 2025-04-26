@@ -128,28 +128,6 @@
         script = ../../recipes/generate-secrets.sh;
       };
 
-      provision-hetzner-vm = {
-        args = [
-          "hostname"
-          "type"
-          "location"
-          { name = "nixos_version"; default = lib.versions.majorMinor lib.version; }
-        ];
-
-        doc = "Provision a new VM on Hetzner and generate a bootstrap host config";
-
-        runtimeInputs = [
-          pkgs.age
-          pkgs.hcloud
-          pkgs.ncurses
-          pkgs.nix
-          pkgs.nixos-anywhere
-          self'.packages.tailscale-get-authkey
-        ];
-
-        script = ../../recipes/provision-hetzner-vm.sh;
-      };
-
       provision-local-vm = {
         args = [
           "hostname"
