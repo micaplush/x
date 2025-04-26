@@ -24,6 +24,7 @@
     paperless.enable = true;
     prometheus.enable = true;
     radicale.enable = true;
+    remotebuild.enable = true;
     res.enable = true;
     reverseproxy.enable = true;
     unbound.enable = true;
