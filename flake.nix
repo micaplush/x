@@ -35,6 +35,24 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin/nix-darwin-24.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    home-manager = {
+      url = "github:nix-community/home-manager/release-24.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    mac-app-util = {
+      url = "github:hraban/mac-app-util";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
+
+
     # Revision is fixed to the latest version published on channels.nixos.org (at the time of writing).
     # This avoids a lot of tedious rebuilding because the caches for the latest commits on the unstable branch are not always warm.
     # The revision to set can be obtained from: https://channels.nixos.org/nixos-unstable/git-revision.
