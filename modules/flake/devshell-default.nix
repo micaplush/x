@@ -70,7 +70,7 @@
         doc = "Run darwin-rebuild on the local host";
 
         script = ''
-          darwin-rebuild --flake .# "$@"
+          sudo darwin-rebuild --flake .# "$@"
         '';
       };
 
