@@ -49,7 +49,13 @@ let
       globalDefinitionsToplevel
     ];
 
-    localEvals = lib.attrValues nixosConfigurations;
+    localEvals = lib.pipe [
+      darwinConfigurations
+      nixosConfigurations
+    ] [
+      (lib.map lib.attrValues)
+      lib.concatLists
+    ];
   };
 
   nixosLocalModules = gatherActiveModules ../nixos;
