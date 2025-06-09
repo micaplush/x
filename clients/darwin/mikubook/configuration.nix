@@ -51,17 +51,17 @@
   ];
 
   homebrew.casks = [
-    { name = "tor-browser"; }
-    { name = "iTerm2"; }
     { name = "betterdisplay"; }
-    { name = "steermouse"; }
-    { name = "middleclick"; args.no_quarantine = true; }
+    { name = "imazing-profile-editor"; }
+    { name = "iTerm2"; }
     { name = "keepassxc"; }
+    { name = "launchcontrol"; }
+    { name = "librewolf"; args.no_quarantine = true; }
+    { name = "middleclick"; args.no_quarantine = true; }
+    { name = "steermouse"; }
     { name = "syncthing"; }
     { name = "tailscale"; }
-    { name = "librewolf"; args.no_quarantine = true; }
-    { name = "imazing-profile-editor"; }
-    { name = "launchcontrol"; }
+    { name = "tor-browser"; }
   ];
 
   security.pam.services.sudo_local.touchIdAuth = true;
