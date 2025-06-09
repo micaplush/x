@@ -52,12 +52,19 @@
 
   homebrew.casks = [
     { name = "betterdisplay"; }
+    { name = "bluesnooze"; }
+    { name = "element"; }
+    { name = "firefox"; }
+    { name = "gimp"; }
+    { name = "hiddenbar"; }
     { name = "imazing-profile-editor"; }
     { name = "iTerm2"; }
+    { name = "karabiner-elements"; }
     { name = "keepassxc"; }
     { name = "launchcontrol"; }
     { name = "librewolf"; args.no_quarantine = true; }
     { name = "middleclick"; args.no_quarantine = true; }
+    { name = "signal"; }
     { name = "steermouse"; }
     { name = "syncthing"; }
     { name = "tailscale"; }
