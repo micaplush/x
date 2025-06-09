@@ -203,7 +203,7 @@
           sudo tailscale status --json | jq --raw-output --sort-keys '{
               "domain": .CurrentTailnet.MagicDNSSuffix,
               "nodes": [ .Self, .Peer[] ] | map({ "key": .DNSName | split(".")[0], "value": .TailscaleIPs | map(select(contains(":") | not))[0] }) | from_entries
-          }' > local/base/tailscale/tailnet.json
+          }' > modules/nixos/base/tailscale/tailnet.json
         '';
       };
     };
