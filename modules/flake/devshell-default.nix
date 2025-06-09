@@ -61,6 +61,19 @@
         '';
       };
 
+      darwin-rebuild = {
+        args = lib.singleton {
+          name = "darwin-rebuild_args";
+          variadic = "*";
+        };
+
+        doc = "Run darwin-rebuild on the local host";
+
+        script = ''
+          darwin-rebuild --flake .# "$@"
+        '';
+      };
+
       delete-unreferenced-secrets = {
         doc = "Delete data and entropy files for secrets that are not referenced in any host config";
         script = ''
