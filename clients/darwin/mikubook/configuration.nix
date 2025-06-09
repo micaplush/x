@@ -12,7 +12,6 @@
     just
     nixpkgs-fmt
     htop
-    lazygit
   ];
 
   networking.hostName = "mikubook";
@@ -224,6 +223,13 @@
           ms-python.python
           redhat.vscode-xml
         ];
+      };
+    };
+
+    programs.lazygit = {
+      enable = true;
+      settings = {
+        git.autoForwardBranches = "none";
       };
     };
 
