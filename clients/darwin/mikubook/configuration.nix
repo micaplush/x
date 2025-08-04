@@ -270,11 +270,43 @@
           }))
       ];
 
+      foxmoxHostParams = {
+        fox01 = {
+          addresses = [ "192.168.7.11" ];
+          publicKey = "ssh-ed25519 AAAAREDACTED";
+        };
+        fox02 = {
+          addresses = [ "192.168.7.12" ];
+          publicKey = "ssh-ed25519 AAAAREDACTED";
+        };
+        fox03 = {
+          addresses = [ "192.168.7.13" ];
+          publicKey = "ssh-ed25519 AAAAREDACTED";
+        };
+      };
+
+      foxmoxHosts = lib.flip lib.mapAttrs' foxmoxHostParams
+        (hostname: params: {
+          name = "${hostname}.in.tbx.at";
+          value = {
+            inherit (params) publicKey;
+            hostNames = lib.flatten [
+              hostname
+              "${hostname}.in.tbx.at"
+              params.addresses
+            ];
+          };
+        });
+
       otherHosts = {
         "github.com".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl";
       };
 
-      knownHosts = otherHosts // internalHosts;
+      knownHosts = lib.mergeAttrsList [
+        otherHosts
+        foxmoxHosts
+        internalHosts
+      ];
     in
     knownHosts;
 
