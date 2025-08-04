@@ -88,7 +88,7 @@ let
     (builtins.mapAttrs (hostname: lib.const (nixosConfig hostname)))
   ];
 
-  darwinLocalModules = [ ];
+  darwinLocalModules = gatherActiveModules ../darwin;
   darwinHostModules = hostname: [ ../../clients/darwin/${hostname}/configuration.nix ];
 
   darwinConfig = hostname: inputs.nix-darwin.lib.darwinSystem {
