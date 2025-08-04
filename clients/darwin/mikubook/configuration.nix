@@ -242,6 +242,10 @@
       };
     };
 
+    home.file.".config/ncmpcpp/config".text = ''
+      mpd_music_dir = "~/Media/music"
+    '';
+
     home.stateVersion = "24.11";
   };
 
