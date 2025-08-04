@@ -66,8 +66,8 @@
     { name = "middleclick"; args.no_quarantine = true; }
     { name = "signal"; }
     { name = "steermouse"; }
-    { name = "syncthing"; }
-    { name = "tailscale"; }
+    { name = "syncthing-app"; }
+    { name = "tailscale-app"; }
     { name = "tor-browser"; }
   ];
 
