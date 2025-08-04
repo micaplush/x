@@ -145,6 +145,8 @@
           ${builtins.toPath ./iterm2.plist} $HOME/Data/iTerm2/com.googlecode.iterm2.plist
     '';
 
+    programs.ssh.enable = true;
+
     programs.ssh.extraConfig =
       let
         hosts = lib.pipe globalConfig.netsrv.hosts [
