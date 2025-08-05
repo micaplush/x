@@ -31,6 +31,7 @@ Just a rough overview (the blog posts should fill in the rest):
 - **domainconfigs:** Configs of deployed LibVirt VMs (aka "domains" in
   LibVirt-jargon)
 - **modules:** All kinds of modules using the Nix module system
+  - **darwin:** nix-darwin modules
   - **flake:** Flake modules using flake-parts
   - **global:** Globalmods (will make sense when I get to that blog post)
   - **globaldata:** Globalmods that only contain config
