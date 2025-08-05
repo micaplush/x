@@ -22,6 +22,8 @@
   programs.fish = {
     enable = true;
 
+    promptInit = builtins.readFile ./fish_prompt.fish;
+
     shellInit = ''
       fish_add_path /opt/homebrew/bin
     '';
