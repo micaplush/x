@@ -23,6 +23,8 @@
     '';
 
     interactiveShellInit = ''
+      complete git --condition '__fish_git_using_command fixup reword split' --no-files --keep-order --arguments '(__fish_git_recent_commits)'
+
       tailscale completion fish | source
     '';
   };

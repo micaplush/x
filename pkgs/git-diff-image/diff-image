@@ -1,0 +1,200 @@
+#!/bin/bash
+
+set -euo pipefail
+
+usage()
+{
+    echo "Usage: $0 [<options>] <file1> <file2>"
+    echo
+    echo "Options:"
+    echo "  -h         Print this help."
+    echo "  -b <color> Use this as the background color; defaults to white."
+    echo "  -c <color> Highlight differences with this color; defaults to red."
+    echo "  -e         Show Exif differences only; don't compare the image data."
+    echo "  -f <fuzz>  Use the specified percentage of fuzz.  Defaults to "
+    echo "                 5% for JPEGs, zero otherwise."
+    echo "  -n <name>  The name to give the first file."
+    echo "  -N <name>  The name to give the second file."
+    echo "  -o <path>  Output pathname to save diff instead of showing it"
+    echo
+}
+
+
+backgroundcolor=
+color=
+exif_only=false
+fuzz=
+name1=
+name2=
+outputPath=
+
+while getopts "hb:c:ef:n:N:o:" opt
+do
+    case "$opt" in
+    h)
+        usage
+        exit 0
+        ;;
+    b)
+        backgroundcolor="$OPTARG"
+        ;;
+    c)
+        color="$OPTARG"
+        ;;
+    e)
+        exif_only=true
+        ;;
+    f)
+        fuzz="$OPTARG"
+        ;;
+    n)
+        name1="$OPTARG"
+        ;;
+    N)
+        name2="$OPTARG"
+        ;;
+    o)
+        outputPath="$OPTARG"
+        ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+
+if [ -z "${1-}" ] || [ -z "${2-}" ]
+then
+    usage
+    exit 1
+fi
+
+f1="$1"
+f2="$2"
+
+if [[ "$f1" != '/dev/null' ]] && [[ ! -f "$f1" ]]
+then
+    echo "$f1: No such file." >&2
+    exit 1
+fi
+
+if [[ -d "$f2" ]]
+then
+   f=$(basename "$f1")
+   f2="$f2/$f"
+fi
+
+if [[ "$f2" != '/dev/null' ]] && [[ ! -f "$f2" ]]
+then
+    echo "$f2: No such file." >&2
+    usage
+    exit 1
+fi
+
+if [[ -z "$name1" ]]
+then
+    name1="$f1"
+fi
+if [[ -z "$name2" ]]
+then
+    name2="$f2"
+fi
+
+ext="${name1##*.}"
+
+
+if diff "$f1" "$f2" >/dev/null
+then
+  exit 0
+fi
+
+
+exif()
+{
+    if [[ "$1" = /dev/null ]]
+    then
+        echo /dev/null
+        return
+    fi
+
+    local b="$(basename "$1")"
+    local d="$(mktemp -t "$b.XXXXXX")"
+
+    exiftool "$1" | grep -v 'File Name' | \
+                    grep -v 'Directory' | \
+                    grep -v 'ExifTool Version Number' | \
+                    grep -v 'File Inode Change' | \
+                    grep -v 'File Access Date/Time' | \
+                    grep -v 'File Modification Date/Time' | \
+                    grep -v 'File Permissions' | \
+                    grep -v 'File Type Extension' | \
+                    sort \
+        >"$d"
+    echo "$d"
+}
+
+
+diff_clean_names()
+{
+    diff -u "$1" --label "$name1" "$2" --label "$name2" || true
+}
+
+
+d1="$(exif "$f1")"
+d2="$(exif "$f2")"
+diff_clean_names "$d1" "$d2"
+set +e
+diff -q "$d1" "$d2" >/dev/null
+exifdiff=$?
+set -e
+
+if $exif_only
+then
+    exit 0
+fi
+
+if [[ $exifdiff = 0 ]] && compare "$f1" "$f2" /dev/null
+then
+    exit 0
+fi
+
+bn="$(basename "$f1")"
+destfile="$(mktemp -t "$bn.XXXXXX").png"
+
+if [ -z "$fuzz" ] && ( [ "$ext" = "jpeg" ] || [ "$ext" = "jpg" ] )
+then
+    fuzz='5'
+fi
+
+backgroundcolor_flag=
+if [ -n "$backgroundcolor" ]
+then
+    backgroundcolor_flag="-background $backgroundcolor"
+fi
+
+color_flag=
+if [ -n "$color" ]
+then
+    color_flag="-highlight-color $color"
+fi
+
+fuzz_flag=
+if [ -n "$fuzz" ]
+then
+    fuzz_flag="-fuzz $fuzz%"
+fi
+
+do_compare()
+{
+  compare $color_flag $fuzz_flag $backgroundcolor_flag "$f1" "$f2" png:- >"$destfile" 2>/dev/null || true
+}
+
+do_compare
+if [ -n "$outputPath" ]
+then
+    echo "Copy diff image to $outputPath"
+    cp "$destfile" "$outputPath"
+elif [ $(uname) = 'Darwin' ]
+then
+    qlmanage -p "$destfile" "$f1" "$f2" > /dev/null
+else
+    imv "$destfile" "$f1" "$f2"
+fi
