@@ -20,6 +20,10 @@ in
         reverse_proxy http://192.168.7.3
       '';
 
+      "console.crs305".extraConfig = ''
+        reverse_proxy http://192.168.7.4
+      '';
+
       scanner.extraConfig = ''
         reverse_proxy http://192.168.9.3
       '';
