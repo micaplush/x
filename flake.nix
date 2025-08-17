@@ -3,7 +3,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
 
     lix-module = {
-      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.93.0.tar.gz";
+      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.93.3-1.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -56,7 +56,7 @@
     # Revision is fixed to the latest version published on channels.nixos.org (at the time of writing).
     # This avoids a lot of tedious rebuilding because the caches for the latest commits on the unstable branch are not always warm.
     # The revision to set can be obtained from: https://channels.nixos.org/nixos-unstable/git-revision.
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/3e3afe5174c561dee0df6f2c2b2236990146329f";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/fbcf476f790d8a217c3eab4e12033dc4a0f6d23c";
   };
 
   outputs = inputs@{ flake-parts, gitignorenix, lix-module, ... }:
