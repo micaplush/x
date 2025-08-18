@@ -65,7 +65,7 @@ func main() {
 	}
 
 	resp, err := client.Post(
-		"https://api.tailscale.com/api/v2/tailnet/t0astbread.github/keys",
+		"https://api.tailscale.com/api/v2/tailnet/micaplush.github/keys",
 		"application/json",
 		bytes.NewReader(payloadBytes),
 	)
