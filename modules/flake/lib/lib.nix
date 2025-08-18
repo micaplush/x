@@ -1,7 +1,8 @@
-{ inputs, lib, pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 let
   inherit (inputs.gitignorenix.lib) gitignoreFilterWith;
+  inherit (inputs.nixpkgs) lib;
 
   pkgsBasePath = ../../../pkgs;
 in

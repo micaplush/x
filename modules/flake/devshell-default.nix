@@ -147,7 +147,7 @@
           "vcpu"
           "memory"
           "disk_size"
-          { name = "nixos_version"; default = lib.versions.majorMinor lib.version; }
+          { name = "nixos_version"; default = self'.lib.nixpkgs.trivial.release; }
         ];
 
         doc = "Provision a new VM and generate a bootstrap host config";
@@ -166,7 +166,7 @@
       provision-pve-vm = {
         args = [
           "hostname"
-          { name = "nixos_version"; default = lib.versions.majorMinor lib.version; }
+          { name = "nixos_version"; default = self'.lib.nixpkgs.trivial.release; }
         ];
 
         doc = "Provision a new VM on Foxmox and generate a bootstrap host config";
