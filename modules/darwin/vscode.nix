@@ -34,7 +34,7 @@
           # Other settings
           "breadcrumbs.enabled" = false;
           "editor.formatOnSave" = true;
-          "editor.minimap.autohide" = true;
+          "editor.minimap.autohide" = "mouseover";
           "files.autoSave" = "onFocusChange";
           "go.showWelcome" = false;
           "window.menuBarVisibility" = "toggle";
