@@ -163,6 +163,25 @@
         script = ../../recipes/provision-local-vm.sh;
       };
 
+      provision-pve-vm = {
+        args = [
+          "hostname"
+          { name = "nixos_version"; default = lib.versions.majorMinor lib.version; }
+        ];
+
+        doc = "Provision a new VM on Foxmox and generate a bootstrap host config";
+
+        runtimeInputs = [
+          pkgs.age
+          pkgs.ncurses
+          pkgs.nix
+          pkgs.rsync
+          self'.packages.tailscale-get-authkey
+        ];
+
+        script = ../../recipes/provision-pve-vm.sh;
+      };
+
       reboot = {
         args = [ "host" ];
         doc = "Reboot a given host";
@@ -185,6 +204,7 @@
             ')
 
           while read -r -u 4 secret; do
+            echo "Rekeying $secret..."
             AGENIX_EDITOR=: just agenix -e "$secret"
           done 4<<< "$secrets"
         '';

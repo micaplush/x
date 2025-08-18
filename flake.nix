@@ -52,6 +52,10 @@
 
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
 
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Revision is fixed to the latest version published on channels.nixos.org (at the time of writing).
     # This avoids a lot of tedious rebuilding because the caches for the latest commits on the unstable branch are not always warm.
@@ -59,7 +63,7 @@
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/fbcf476f790d8a217c3eab4e12033dc4a0f6d23c";
   };
 
-  outputs = inputs@{ flake-parts, gitignorenix, lix-module, ... }:
+  outputs = inputs@{ flake-parts, gitignorenix, lix-module, nixos-generators, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         ./modules/flake/configurations.nix
@@ -69,6 +73,7 @@
         ./modules/flake/lib
         ./modules/flake/overlay.nix
         ./modules/flake/packages.nix
+        ./modules/flake/pve-installer-iso
         ./modules/flake/secrets.nix
       ];
 
